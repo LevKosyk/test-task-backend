@@ -33,13 +33,31 @@ const payouts = {
 const baseReelSet = [1, 2, 3, 4, 5, 6, 7];
 const bonusReelSet = [1, 2, 3];
 
-function playSpin(reelSet) {
-  const field = makeRoll(reelSet);
-  showField(field);
-  const winAmount = calculateWin(field);
-  return winAmount;
+function countScatters(field) {
+  let count = 0;
+  for (let i = 0; i < 5; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (field[i][j] === 7) {
+        count++;
+      }
+    }
+  }
+  return count;
 }
 
+function playSpin() {
+  let totalWin = 0;
+  const baseField = makeRoll(baseReelSet);
+  totalWin += calculateWin(baseField);
+  const scattersCount = countScatters(baseField);
+  if (scattersCount >= 3) {
+    for (let i = 0; i < 8; i++) {
+      const bonusField = makeRoll(bonusReelSet);
+      totalWin += calculateWin(bonusField);
+    }
+  }
+  return totalWin;
+}
 
 function makeRoll(reelSet) {
   const field = [];
