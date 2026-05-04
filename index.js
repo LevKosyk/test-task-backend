@@ -32,6 +32,7 @@ const payouts = {
 
 const baseReelSet = [1, 2, 3, 4, 5, 6, 7];
 const bonusReelSet = [1, 2, 3];
+const betPerSpin = 10;
 
 function countScatters(field) {
   let count = 0;
@@ -46,18 +47,46 @@ function countScatters(field) {
 }
 
 function playSpin() {
-  let totalWin = 0;
+  let baseWin = 0;
+  let bonusWin = 0;
   const baseField = makeRoll(baseReelSet);
-  totalWin += calculateWin(baseField);
+  baseWin += calculateWin(baseField);
   const scattersCount = countScatters(baseField);
   if (scattersCount >= 3) {
     for (let i = 0; i < 8; i++) {
       const bonusField = makeRoll(bonusReelSet);
-      totalWin += calculateWin(bonusField);
+      bonusWin += calculateWin(bonusField);
     }
   }
-  return totalWin;
+  return { baseWin, bonusWin };
 }
+
+function runSimulation(numSpins) {
+  let totalBaseWin = 0;
+  let totalBonusWin = 0;
+
+  for (let i = 0; i < numSpins; i++) {
+    const result = playSpin();
+    totalBaseWin += result.baseWin;
+    totalBonusWin += result.bonusWin;
+  }
+
+  const totalBet = numSpins * betPerSpin;
+  const totalWin = totalBaseWin + totalBonusWin;
+
+  const baseRTP = (totalBaseWin / totalBet) * 100;
+  const bonusRTP = (totalBonusWin / totalBet) * 100;
+  const totalRTP = (totalWin / totalBet) * 100;
+
+  console.log(`Simulation Results for ${numSpins} spins`);
+  console.log(`Total Bet: ${totalBet}`);
+  console.log(`Total Win: ${totalWin}`);
+  console.log(`Base Game RTP: ${baseRTP.toFixed(2)}%`);
+  console.log(`Bonus Game RTP: ${bonusRTP.toFixed(2)}%`);
+  console.log(`Total RTP: ${totalRTP.toFixed(2)}%`);
+}
+
+runSimulation(1000000);
 
 function makeRoll(reelSet) {
   const field = [];
@@ -88,13 +117,10 @@ function calculateWin(field) {
   for (let lineIndex = 0; lineIndex < paylines.length; lineIndex++) {
     const line = paylines[lineIndex];
     const firstSymbol = field[0][line[0]];
-
     if (firstSymbol === 7) {
       continue;
     }
-
     let matchCount = 1;
-
     for (let col = 1; col < 5; col++) {
       const currentSymbol = field[col][line[col]];
       if (currentSymbol === firstSymbol) {
@@ -103,12 +129,10 @@ function calculateWin(field) {
         break;
       }
     }
-
     if (matchCount >= 3) {
       const win = payouts[firstSymbol][matchCount];
       totalWin += win;
     }
   }
-
   return totalWin;
 }
