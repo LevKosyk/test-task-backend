@@ -1,5 +1,5 @@
-import { betPerSpin } from "./config.js";
-import { playSpin } from "./base.js";
+import { betPerSpin } from "./moduls/config/config.js";
+import { playSpin } from "./moduls/games/base.js";
 
 function runSimulation(numSpins) {
   let totalBaseWin = 0;

@@ -1,5 +1,5 @@
-import { baseReelSet} from './config.js';
-import { makeRoll, calculateWin, countScatters } from './utils.js';
+import { baseReelSet} from '../config/config.js';
+import { makeRoll, calculateWin, countScatters } from '../utils/utils.js';
 import { runBonus } from './bonus.js';
 
 export function playSpin() {

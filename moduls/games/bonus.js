@@ -1,5 +1,5 @@
-import { bonusReelSet } from './config.js';
-import { makeRoll, calculateWin } from './utils.js';
+import { bonusReelSet } from '../config/config.js';
+import { makeRoll, calculateWin } from '../utils/utils.js';
 
 export function runBonus() {
   let bonusWin = 0;

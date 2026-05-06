@@ -1,4 +1,4 @@
-import { paylines, payouts, symbolMapping } from "./config.js";
+import { paylines, payouts, symbolMapping } from "../config/config.js";
 
 export function makeRoll(reelStrip) {
   const field = [];
