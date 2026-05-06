@@ -1,23 +1,29 @@
-import { paylines, payouts, symbolMapping } from './config.js';
+import { paylines, payouts, symbolMapping } from "./config.js";
 
-export function makeRoll(reelSet) {
+export function makeRoll(reelStrip) {
   const field = [];
-  for (let i = 0; i < 5; i++) {
-    field[i] = [];
-    for (let j = 0; j < 3; j++) {
-      const randomIndex = Math.floor(Math.random() * reelSet.length);
-      field[i][j] = reelSet[randomIndex];
-    }
+
+  for (let col = 0; col < 5; col++) {
+    field[col] = [];
+
+    const n = Math.floor(Math.random() * reelStrip.length);
+
+    const topIndex = (n - 1 + reelStrip.length) % reelStrip.length;
+    const bottomIndex = (n + 1) % reelStrip.length;
+
+    field[col][0] = reelStrip[topIndex];
+    field[col][1] = reelStrip[n];
+    field[col][2] = reelStrip[bottomIndex];
   }
   return field;
 }
 
 export function showField(field) {
   for (let j = 0; j < 3; j++) {
-    let str = '';
+    let str = "";
     for (let i = 0; i < 5; i++) {
       const symbolId = field[i][j];
-      str += symbolMapping[symbolId] + '\t';
+      str += symbolMapping[symbolId] + "\t";
     }
     console.log(str);
   }
